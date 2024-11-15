@@ -33,7 +33,6 @@ struct GachaScreen: View {
     // Function to simulate gacha roll
     func rollGacha() {
         let randomRoll = Int.random(in: 1...100)
-        
         if randomRoll <= 50 {
             // 50% chance to get a notebook (Blue Square)
             itemShape = "You rolled a Notebook!"
@@ -169,7 +168,8 @@ struct GachaScreen: View {
 
             // Confetti cannon overlay to ensure it appears on top of the popup
             ConfettiCannon(counter: $confettiCounter, num: 30, colors: [.blue, .yellow, .red], confettiSize: 20, rainHeight: 500, radius: 200)
-
+            // Array for the shapes
+            var Shapes = [String]()
             // Custom popup to show the shape after the roll
             if showPopup {
                 ZStack {
@@ -183,14 +183,17 @@ struct GachaScreen: View {
                         
                         // Display the shape
                         if shapeType == "square" {
+                            Shapes.append("square")
                             Rectangle()
                                 .fill(shapeColor)
                                 .frame(width: 100, height: 100)
                         } else if shapeType == "triangle" {
+                            Shapes.append("triangle")
                             CustomTriangle()
                                 .fill(shapeColor)
                                 .frame(width: 100, height: 100)
                         } else if shapeType == "circle" {
+                            Shapes.append("Circle")
                             Circle()
                                 .fill(shapeColor)
                                 .frame(width: 100, height: 100)
@@ -216,6 +219,20 @@ struct GachaScreen: View {
             }
         }
         .navigationBarBackButtonHidden(true) // Hide the default back button
+        NavigationView {
+            VStack {
+                NavigationLink(destination: GachaItems()){
+                    Text("Go To Items")
+                    .font(.headline)
+                    .padding()
+                    .background(Color.blue)
+                    .foregroundColor(.white)
+                    .cornerRadius(10)
+                }
+            }
+            
+        }
+        .buttonStyle(.borderProminent)
     }
 }
 
@@ -233,151 +250,4 @@ struct CustomTriangle: Shape {
 
 #Preview {
     GachaScreen()
-}
-//added stuff
-@State private var gachaItems: [String] = [] // Array to store rolled items
-
-var body: some View {
-    ZStack {
-        VStack {
-            HStack {
-                Button(action: {
-                    presentationMode.wrappedValue.dismiss()
-                }) {
-                    HStack(spacing: 5) {
-                        Image(systemName: "house.fill")
-                        Text("Go Back")
-                            .font(.headline)
-                    }
-                    .padding(8)
-                    .background(Color.gray.opacity(0.2))
-                    .cornerRadius(25)
-                }
-                .padding(.leading, 20)
-
-                Spacer()
-
-                HStack(spacing: 5) {
-                    ZStack {
-                        Circle()
-                            .fill(Color.yellow.opacity(0.9))
-                            .frame(width: 25, height: 25)
-                        
-                        Circle()
-                            .fill(Color.yellow.opacity(0.6))
-                            .frame(width: 15, height: 15)
-                    }
-                    
-                    Text("\(userPoints)")
-                        .font(.headline)
-                        .foregroundColor(.black)
-                }
-                .padding(8)
-                .background(Color.gray.opacity(0.2))
-                .cornerRadius(25)
-                .padding(.trailing, 20)
-            }
-            .offset(x: moveComponentsOffScreen ? 1000 : 0)
-            
-            Spacer()
-
-            Text("Gacha Roll")
-                .font(.largeTitle)
-                .padding()
-                .offset(x: moveComponentsOffScreen ? -1000 : 0)
-            
-            Button(action: {
-                if userPoints >= rollCost {
-                    rollGacha() // Trigger the gacha roll
-                }
-            }) {
-                Text("Roll for an Item - \(rollCost) points")
-                    .font(.headline)
-                    .padding()
-                    .background(userPoints >= rollCost ? Color.blue : Color.gray)
-                    .foregroundColor(.white)
-                    .cornerRadius(10)
-            }
-            .disabled(userPoints < rollCost)
-            .offset(x: moveComponentsOffScreen ? -1000 : 0)
-
-            Spacer()
-            
-            // Display accumulated gacha items
-            VStack(alignment: .leading) {
-                Text("Rolled Items:")
-                    .font(.headline)
-                    .padding(.bottom, 5)
-                
-                ForEach(gachaItems, id: \.self) { item in
-                    Text("- \(item)")
-                        .padding(5)
-                        .background(Color.gray.opacity(0.1))
-                        .cornerRadius(8)
-                }
-            }
-            .padding()
-        }
-
-        RoundedRectangle(cornerRadius: 15)
-            .fill(isBoxOpening ? Color.green : Color.gray)
-            .frame(width: 150, height: 150)
-            .scaleEffect(boxScale)
-            .position(x: UIScreen.main.bounds.width / 2, y: boxPosition)
-
-        ConfettiCannon(counter: $confettiCounter, num: 30, colors: [.blue, .yellow, .red], confettiSize: 20, rainHeight: 500, radius: 200)
-
-        if showPopup {
-            ZStack {
-                Color.black.opacity(0.4)
-                    .edgesIgnoringSafeArea(.all)
-                
-                VStack {
-                    Text(itemShape)
-                        .font(.headline)
-                        .padding()
-                    
-                    if shapeType == "square" {
-                        Rectangle()
-                            .fill(shapeColor)
-                            .frame(width: 100, height: 100)
-                    } else if shapeType == "triangle" {
-                        CustomTriangle()
-                            .fill(shapeColor)
-                            .frame(width: 100, height: 100)
-                    } else if shapeType == "circle" {
-                        Circle()
-                            .fill(shapeColor)
-                            .frame(width: 100, height: 100)
-                    }
-                    
-                    Button("Close") {
-                        showPopup = false
-                        withAnimation {
-                            moveComponentsOffScreen = false
-                            boxPosition = UIScreen.main.bounds.height
-                        }
-                    }
-                    .padding()
-                    .background(Color.gray)
-                    .foregroundColor(.white)
-                    .cornerRadius(10)
-                }
-                .padding()
-                .background(Color.white)
-                .cornerRadius(15)
-                .shadow(radius: 20)
-            }
-        }
-    }
-    .navigationBarBackButtonHidden(true)
-}
-
-// Function to simulate gacha roll and add item to gachaItems
-func rollGacha() {
-    userPoints -= rollCost
-    let newItem = getRandomItem() // Replace with actual item roll logic
-    gachaItems.append(newItem)
-    itemShape = newItem
-    showPopup = true
 }

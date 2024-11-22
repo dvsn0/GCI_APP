@@ -12,6 +12,7 @@ struct GachaScreen: View {
     @Environment(\.presentationMode) var presentationMode // For dismissing the view
 
     // State to hold the shape and the item description
+    @State private var shapes = [String]()
     @State private var itemShape: String = ""
     @State private var showPopup: Bool = false
     @State private var shapeColor: Color = .clear
@@ -87,152 +88,179 @@ struct GachaScreen: View {
     }
 
     var body: some View {
-        ZStack {
-            // Main VStack to hold the UI elements
-            VStack {
-                // Top HStack for the "Go Back" button and the points display
-                HStack {
-                    // Go Back button
-                    Button(action: {
-                        // Dismiss the current view and go back
-                        presentationMode.wrappedValue.dismiss()
-                    }) {
+        ScrollView {
+            ZStack {
+                // Main VStack to hold the UI elements
+                VStack {
+                    // Top HStack for the "Go Back" button and the points display
+                    HStack {
+                        // Go Back button
+                        Button(action: {
+                            // Dismiss the current view and go back
+                            presentationMode.wrappedValue.dismiss()
+                        }) {
+                            HStack(spacing: 5) {
+                                Image(systemName: "house.fill")
+                                Text("Go Back")
+                                    .font(.headline)
+                            }
+                            .padding(8)
+                            .background(Color.gray.opacity(0.2))
+                            .cornerRadius(25)
+                        }
+                        .padding(.leading, 20)
+
+                        Spacer()
+
+                        // User points display in top right, moves off screen when rolling
                         HStack(spacing: 5) {
-                            Image(systemName: "house.fill")
-                            Text("Go Back")
+                            ZStack {
+                                Circle()
+                                    .fill(Color.yellow.opacity(0.9))
+                                    .frame(width: 25, height: 25)
+                                
+                                Circle()
+                                    .fill(Color.yellow.opacity(0.6))
+                                    .frame(width: 15, height: 15)
+                            }
+                            
+                            Text("\(userPoints)")
                                 .font(.headline)
+                                .foregroundColor(.black)
                         }
                         .padding(8)
                         .background(Color.gray.opacity(0.2))
                         .cornerRadius(25)
+                        .padding(.trailing, 20)
                     }
-                    .padding(.leading, 20)
-
+                    .offset(x: moveComponentsOffScreen ? 1000 : 0) // Moves right out of screen
+                    
                     Spacer()
 
-                    // User points display in top right, moves off screen when rolling
-                    HStack(spacing: 5) {
-                        ZStack {
-                            Circle()
-                                .fill(Color.yellow.opacity(0.9))
-                                .frame(width: 25, height: 25)
-                            
-                            Circle()
-                                .fill(Color.yellow.opacity(0.6))
-                                .frame(width: 15, height: 15)
-                        }
-                        
-                        Text("\(userPoints)")
-                            .font(.headline)
-                            .foregroundColor(.black)
-                    }
-                    .padding(8)
-                    .background(Color.gray.opacity(0.2))
-                    .cornerRadius(25)
-                    .padding(.trailing, 20)
-                }
-                .offset(x: moveComponentsOffScreen ? 1000 : 0) // Moves right out of screen
-                
-                Spacer()
-
-                Text("Gacha Roll")
-                    .font(.largeTitle)
-                    .padding()
-                    .offset(x: moveComponentsOffScreen ? -1000 : 0) // Moves left out of screen
-                
-                Button(action: {
-                    // Only roll if the user has enough points
-                    if userPoints >= rollCost {
-                        rollGacha() // Trigger the gacha roll
-                    }
-                }) {
-                    Text("Roll for an Item - \(rollCost) points")
-                        .font(.headline)
+                    Text("Gacha Roll")
+                        .font(.largeTitle)
                         .padding()
-                        .background(userPoints >= rollCost ? Color.blue : Color.gray)
-                        .foregroundColor(.white)
-                        .cornerRadius(10)
-                }
-                .disabled(userPoints < rollCost) // Disable if not enough points
-                .offset(x: moveComponentsOffScreen ? -1000 : 0) // Moves left out of screen
-
-                Spacer()
-            }
-
-            // Box that opens during the roll, moves up from the bottom to the middle
-            RoundedRectangle(cornerRadius: 15)
-                .fill(isBoxOpening ? Color.green : Color.gray)
-                .frame(width: 150, height: 150)
-                .scaleEffect(boxScale)
-                .position(x: UIScreen.main.bounds.width / 2, y: boxPosition) // Position to control box movement
-
-            // Confetti cannon overlay to ensure it appears on top of the popup
-            ConfettiCannon(counter: $confettiCounter, num: 30, colors: [.blue, .yellow, .red], confettiSize: 20, rainHeight: 500, radius: 200)
-            // Array for the shapes
-            var Shapes = [String]()
-            // Custom popup to show the shape after the roll
-            if showPopup {
-                ZStack {
-                    Color.black.opacity(0.4) // Dim background
-                        .edgesIgnoringSafeArea(.all)
+                        .offset(x: moveComponentsOffScreen ? -1000 : 0) // Moves left out of screen
                     
-                    VStack {
-                        Text(itemShape)
+                    Button(action: {
+                        // Only roll if the user has enough points
+                        if userPoints >= rollCost {
+                            rollGacha() // Trigger the gacha roll
+                        }
+                    }) {
+                        Text("Roll for an Item - \(rollCost) points")
                             .font(.headline)
                             .padding()
+                            .background(userPoints >= rollCost ? Color.blue : Color.gray)
+                            .foregroundColor(.white)
+                            .cornerRadius(10)
+                    }
+                    .disabled(userPoints < rollCost) // Disable if not enough points
+                    .offset(x: moveComponentsOffScreen ? -1000 : 0) // Moves left out of screen
+
+                    Spacer()
+                }
+
+                // Box that opens during the roll, moves up from the bottom to the middle
+                RoundedRectangle(cornerRadius: 15)
+                    .fill(isBoxOpening ? Color.green : Color.gray)
+                    .frame(width: 150, height: 150)
+                    .scaleEffect(boxScale)
+                    .position(x: UIScreen.main.bounds.width / 2, y: boxPosition) // Position to control box movement
+
+                // Confetti cannon overlay to ensure it appears on top of the popup
+                ConfettiCannon(counter: $confettiCounter, num: 30, colors: [.blue, .yellow, .red], confettiSize: 20, rainHeight: 500, radius: 200)
+                // Custom popup to show the shape after the roll
+                if showPopup {
+                    ZStack {
+                        Color.black.opacity(0.4) // Dim background
+                            .edgesIgnoringSafeArea(.all)
                         
-                        // Display the shape
-                        if shapeType == "square" {
-                            Shapes.append("square")
-                            Rectangle()
-                                .fill(shapeColor)
-                                .frame(width: 100, height: 100)
-                        } else if shapeType == "triangle" {
-                            Shapes.append("triangle")
-                            CustomTriangle()
-                                .fill(shapeColor)
-                                .frame(width: 100, height: 100)
-                        } else if shapeType == "circle" {
-                            Shapes.append("Circle")
-                            Circle()
-                                .fill(shapeColor)
-                                .frame(width: 100, height: 100)
-                        }
-                        
-                        Button("Close") {
-                            showPopup = false
-                            withAnimation {
-                                moveComponentsOffScreen = false // Bring the components back to original positions
-                                boxPosition = UIScreen.main.bounds.height // Move box off screen again
+                        VStack {
+                            Text(itemShape)
+                                .font(.headline)
+                                .padding()
+                            
+                            // Display the shape
+                            if shapeType == "square" {
+                                Shapes.append("square")
+                                Rectangle()
+                                    .fill(shapeColor)
+                                    .frame(width: 100, height: 100)
+                                    .onAppear {
+                                        shapes.append("square")
+                                    }
+                            } else if shapeType == "triangle" {
+                                Shapes.append("triangle")
+                                CustomTriangle()
+                                    .fill(shapeColor)
+                                    .frame(width: 100, height: 100)
+                                    .onAppear {
+                                        shapes.append("triangle")
+                                    }
+                            } else if shapeType == "circle" {
+                                Shapes.append("Circle")
+                                Circle()
+                                    .fill(shapeColor)
+                                    .frame(width: 100, height: 100)
+                                    .onAppear{
+                                        shapes.append("circle")
+                                    }
                             }
+                            
+                            Button("Close") {
+                                showPopup = false
+                                withAnimation {
+                                    moveComponentsOffScreen = false // Bring the components back to original positions
+                                    boxPosition = UIScreen.main.bounds.height // Move box off screen again
+                                }
+                            }
+                            .padding()
+                            .background(Color.gray)
+                            .foregroundColor(.white)
+                            .cornerRadius(10)
                         }
                         .padding()
-                        .background(Color.gray)
-                        .foregroundColor(.white)
-                        .cornerRadius(10)
+                        .background(Color.white)
+                        .cornerRadius(15)
+                        .shadow(radius: 20)
                     }
-                    .padding()
-                    .background(Color.white)
-                    .cornerRadius(15)
-                    .shadow(radius: 20)
                 }
             }
-        }
-        .navigationBarBackButtonHidden(true) // Hide the default back button
-        NavigationView {
-            VStack {
-                NavigationLink(destination: GachaItems()){
-                    Text("Go To Items")
+            if shapes.isEmpty {
+                Text("Your inventory is empty")
                     .font(.headline)
-                    .padding()
-                    .background(Color.blue)
-                    .foregroundColor(.white)
-                    .cornerRadius(10)
+            }
+            else {
+                Text("Your Inventory:")
+                    .font(.headline)
+                ForEach(0..<shapes.count, id: \.self) { index in
+                    renderShape(for: shapes[index])
+                        .frame(width: 100, height: 100)
                 }
             }
-            
         }
+        
+        .navigationBarBackButtonHidden(true) // Hide the default back button
+        
         .buttonStyle(.borderProminent)
+    }
+    
+    @ViewBuilder
+    private func renderShape(for shape: String) -> some View {
+        if shape == "square" {
+            Rectangle()
+                .fill(shapeColor)
+                .frame(width: 100, height: 100)
+        } else if shape == "circle" {
+            Circle()
+                .fill(shapeColor)
+                .frame(width: 100, height: 100)
+        } else if shape == "triangle" {
+            CustomTriangle()
+                .fill(shapeColor)
+                .frame(width: 100, height: 100)
+        }
     }
 }
 

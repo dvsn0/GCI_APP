@@ -183,7 +183,7 @@ struct GachaScreen: View {
                             
                             // Display the shape
                             if shapeType == "square" {
-                                Shapes.append("square")
+                                
                                 Rectangle()
                                     .fill(shapeColor)
                                     .frame(width: 100, height: 100)
@@ -191,7 +191,7 @@ struct GachaScreen: View {
                                         shapes.append("square")
                                     }
                             } else if shapeType == "triangle" {
-                                Shapes.append("triangle")
+                                
                                 CustomTriangle()
                                     .fill(shapeColor)
                                     .frame(width: 100, height: 100)
@@ -199,7 +199,7 @@ struct GachaScreen: View {
                                         shapes.append("triangle")
                                     }
                             } else if shapeType == "circle" {
-                                Shapes.append("Circle")
+                                
                                 Circle()
                                     .fill(shapeColor)
                                     .frame(width: 100, height: 100)
@@ -225,20 +225,32 @@ struct GachaScreen: View {
                         .cornerRadius(15)
                         .shadow(radius: 20)
                     }
+                    if shapes.isEmpty {
+                        Text("Your inventory is empty")
+                            .font(.headline)
+                    }
+                    else {
+                        Text("Your Inventory:")
+                            .font(.headline)
+                        ForEach(0..<shapes.count, id: \.self) { index in
+                            renderShape(for: shapes[index])
+                                .frame(width: 100, height: 100)
+                        }
+                    }
                 }
             }
-            if shapes.isEmpty {
-                Text("Your inventory is empty")
-                    .font(.headline)
-            }
-            else {
-                Text("Your Inventory:")
-                    .font(.headline)
-                ForEach(0..<shapes.count, id: \.self) { index in
-                    renderShape(for: shapes[index])
-                        .frame(width: 100, height: 100)
-                }
-            }
+//            if shapes.isEmpty {
+//                Text("Your inventory is empty")
+//                    .font(.headline)
+//            }
+//            else {
+//                Text("Your Inventory:")
+//                    .font(.headline)
+//                ForEach(0..<shapes.count, id: \.self) { index in
+//                    renderShape(for: shapes[index])
+//                        .frame(width: 100, height: 100)
+//                }
+//            }
         }
         
         .navigationBarBackButtonHidden(true) // Hide the default back button

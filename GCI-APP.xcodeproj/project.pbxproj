@@ -8,16 +8,15 @@
 
 /* Begin PBXBuildFile section */
 		F1145ACE2CCB5F0D0001C8BD /* GCI_APPApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1145ACD2CCB5F0D0001C8BD /* GCI_APPApp.swift */; };
-		F1145AD02CCB5F0D0001C8BD /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1145ACF2CCB5F0D0001C8BD /* ContentView.swift */; };
 		F1145AD22CCB5F0E0001C8BD /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F1145AD12CCB5F0E0001C8BD /* Assets.xcassets */; };
 		F1145AD52CCB5F0E0001C8BD /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F1145AD42CCB5F0E0001C8BD /* Preview Assets.xcassets */; };
 		F1145ADD2CCC171E0001C8BD /* FamilyControls.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F1145ADC2CCC171E0001C8BD /* FamilyControls.framework */; };
+		F153B1972CDEAF1200DF4059 /* ConfettiSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = F153B1962CDEAF1200DF4059 /* ConfettiSwiftUI */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		F1145ACA2CCB5F0D0001C8BD /* GCI-APP.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "GCI-APP.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		F1145ACD2CCB5F0D0001C8BD /* GCI_APPApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GCI_APPApp.swift; sourceTree = "<group>"; };
-		F1145ACF2CCB5F0D0001C8BD /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		F1145AD12CCB5F0E0001C8BD /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		F1145AD42CCB5F0E0001C8BD /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		F1145ADC2CCC171E0001C8BD /* FamilyControls.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FamilyControls.framework; path = System/Library/Frameworks/FamilyControls.framework; sourceTree = SDKROOT; };
@@ -28,6 +27,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F153B1972CDEAF1200DF4059 /* ConfettiSwiftUI in Frameworks */,
 				F1145ADD2CCC171E0001C8BD /* FamilyControls.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -56,7 +56,6 @@
 			isa = PBXGroup;
 			children = (
 				F1145ACD2CCB5F0D0001C8BD /* GCI_APPApp.swift */,
-				F1145ACF2CCB5F0D0001C8BD /* ContentView.swift */,
 				F1145AD12CCB5F0E0001C8BD /* Assets.xcassets */,
 				F1145AD32CCB5F0E0001C8BD /* Preview Content */,
 			);
@@ -95,6 +94,9 @@
 			dependencies = (
 			);
 			name = "GCI-APP";
+			packageProductDependencies = (
+				F153B1962CDEAF1200DF4059 /* ConfettiSwiftUI */,
+			);
 			productName = "GCI-APP";
 			productReference = F1145ACA2CCB5F0D0001C8BD /* GCI-APP.app */;
 			productType = "com.apple.product-type.application";
@@ -123,6 +125,9 @@
 				Base,
 			);
 			mainGroup = F1145AC12CCB5F0D0001C8BD;
+			packageReferences = (
+				F153B1952CDEAF1200DF4059 /* XCRemoteSwiftPackageReference "ConfettiSwiftUI" */,
+			);
 			productRefGroup = F1145ACB2CCB5F0D0001C8BD /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -149,7 +154,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F1145AD02CCB5F0D0001C8BD /* ContentView.swift in Sources */,
 				F1145ACE2CCB5F0D0001C8BD /* GCI_APPApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -356,6 +360,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		F153B1952CDEAF1200DF4059 /* XCRemoteSwiftPackageReference "ConfettiSwiftUI" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/simibac/ConfettiSwiftUI.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.1.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		F153B1962CDEAF1200DF4059 /* ConfettiSwiftUI */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = F153B1952CDEAF1200DF4059 /* XCRemoteSwiftPackageReference "ConfettiSwiftUI" */;
+			productName = ConfettiSwiftUI;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = F1145AC22CCB5F0D0001C8BD /* Project object */;
 }

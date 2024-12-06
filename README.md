@@ -22,31 +22,81 @@ This app addresses social media overuse through productivity tools like a Pomodo
 
 ---
 
-## CONTENTS OF PROJECT FILES
+## CONTENTS OF PROJECT FILES'S KEY FUNCTIONS WITHIN GCI_APPApp.swift
 
-### 1. **Main.swift**
-- Entry point of the application.
-- Manages navigation between primary screens: Pomodoro timer, gacha system, and settings.
+### **MainView**
+- Acts as the primary hub of the application, managing navigation between the **Pomodoro Timer** and **Gacha System**.
+- Uses a **TabView** for seamless transitions between features, providing an intuitive user interface.
+- Integrates a **grayscale functionality** triggered when the Pomodoro Timer is active, creating a distraction-free environment for improved focus.
+- Includes smooth **UI animations** for transitioning between active and inactive timer states, enhancing the user experience.
 
-### 2. **PomodoroTimer.swift**
-- Implements the customizable Pomodoro timer.
-- Allows users to set work/break intervals and tracks progress.
+---
 
-### 3. **GachaSystem.swift**
-- Implements gamified reward mechanics.
-- Handles random item generation and user inventory updates.
+### **ContentView**
+- Implements the core **Pomodoro Timer** functionality, allowing users to:
+  - Set up and manage work and break intervals.
+  - Track time remaining in a session and whether the user is in a work or break period.
+  - Monitor the number of completed tasks and total points earned.
+- Provides a **task setup interface**, enabling users to define session duration, task goals, and preferred Pomodoro intervals (e.g., 25-5 or 50-10).
+- Features a **completion input system** to log completed tasks after each session, ensuring users receive appropriate rewards in points.
 
-### 4. **InventoryView.swift**
-- Displays the user's collection of rewards in an intuitive interface.
-- Includes sorting and filtering options for better usability.
+---
 
-### 5. **GrayscaleMode.swift**
-- Adds a grayscale feature to enhance focus and reduce distractions.
-- Provides toggle functionality for enabling/disabling grayscale mode.
+### **TimerSetupView**
+- Offers a user-friendly interface for customizing the Pomodoro Timer:
+  - **Hours and Minutes:** Allows users to select session duration using picker wheels.
+  - **Task Goals:** Enables input of the total number of tasks planned for the session.
+  - **Pomodoro Intervals:** Provides predefined cycles such as 25-5 or 50-10 for work and break durations.
+- Features a clean and simple design using **SwiftUI Form** and **Picker** components.
+- Includes intuitive navigation options with **Cancel** and **Confirm** buttons for effortless interaction.
 
-### 6. **README.txt**
-- Comprehensive project documentation.
-- Includes author info, project description, file summaries, and running instructions.
+---
+
+### **TimerView**
+- Displays a live countdown timer for active Pomodoro sessions.
+- Dynamically updates the interface based on the current session state:
+  - **Work Period:** Displays a black background with white text.
+  - **Break Period:** Displays a white background with black text.
+- Automatically transitions between work and break intervals based on the selected Pomodoro cycle.
+- Alerts the user when the timer completes and transitions to the **CompletionInputView** for task verification.
+
+---
+
+### **CompletionInputView**
+- Collects user input to log the number of completed tasks after a Pomodoro session.
+- Features a **picker interface** for selecting the number of completed tasks.
+- Updates the **point total** based on completed tasks, rewarding productivity and reinforcing user engagement.
+- Includes an accessible design to ensure a smooth transition back to the main view after task input.
+
+---
+
+### **GachaScreen**
+- Implements a **gamified reward system** to motivate users by converting earned points into virtual rewards.
+- Features:
+  - **Roll Mechanic:** Users spend points to receive randomized items like "Notebook," "Plant Pot," or "Computer," represented by different shapes and colors.
+  - **Inventory Management:** Displays the user's earned items in a visually appealing grid layout.
+  - **Animations:** Includes confetti effects and interactive pop-ups for successful rolls.
+  - **Point Deduction:** Deducts points for each roll, maintaining fairness and consistency.
+- Designed to encourage ongoing app use by linking productivity to enjoyable, gamified rewards.
+
+---
+
+### **Utility Functions**
+- **`startTimer`**:  
+  - Initializes and manages the countdown for active Pomodoro sessions.
+  - Uses Swift’s **Timer** class to decrement time and transition between work and break states automatically.
+
+- **`updatePomodoroState`**:  
+  - Determines whether the user is in a work or break period based on the elapsed time and selected Pomodoro interval.
+  - Ensures smooth transitions to maintain focus and motivation.
+
+- **`resetApp`**:  
+  - Resets session-related variables, such as timer length, task numbers, and session progress.
+  - Prepares the app for a new session without retaining data from previous ones.
+
+- **`rollGacha`**:  
+  - Implements the logic for the Gacha System, generating random rewards based on predefined probabilities.
+  - Updates the user’s inventory and triggers animations and visual effects for successful rolls.
 
 ---
 

@@ -30,6 +30,8 @@ In this project, all custom code is written exclusively within the `GCI_APPApp.s
 
 All app features, such as the Pomodoro Timer, Gacha System, and grayscale mode, are fully implemented and maintained in the `GCI_APPApp.swift` file to ensure clarity and focus for the development process.
 
+---
+
 ### **MainView**
 - Acts as the primary hub of the application, managing navigation between the **Pomodoro Timer** and **Gacha System**.
 - Uses a **TabView** for seamless transitions between features, providing an intuitive user interface.
